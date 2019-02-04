@@ -53,9 +53,13 @@
 			</scroll-view>
 		</view>
 		<view class="uni-list">
-			<view class="uni-list-cell" v-for="(song,index) in resultList" :key="index">
-				<view class="uni-list-cell-navigate uni-navigate-right">
-					{{song.name}}
+			<view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(song,index) in resultList" :key="index">
+				<view class="uni-media-list">
+					<image class="uni-media-list-logo" :src="song.url"></image>
+					<view class="uni-media-list-body">
+						<view class="uni-media-list-text-top">{{song.name}}</view>
+						<view class="uni-media-list-text-bottom uni-ellipsis">{{song.ablum}}</view>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -129,10 +133,11 @@
 						return;
 					}
 					//以下示例截取淘宝的关键字，请替换成你的接口
+					
 					uni.request({
 						url: 'http://shenkeling.top:3000/search?keywords=' + keyword, //仅为示例
 						success: (res) => {
-							// console.log(res)
+							console.log(res)
 							// this.keywordList = this.drawCorrelativeKeyword(res.data.result, keyword);
 							if(res.data.result.songCount > 0){
 								this.isShowKeywordList = false
@@ -145,7 +150,7 @@
 									}
 								})
 								
-								console.log(this.resultList)
+								// console.log(this.resultList)
 							}else{
 								console.log('无结果')
 							}
