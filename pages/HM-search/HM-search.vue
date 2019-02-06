@@ -55,7 +55,7 @@
 			</scroll-view>
 		</view>
 		<view class="uni-list">
-			<view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(song,index) in resultList" :key="index" @tap="tapSong" :data-id="song.id">
+			<view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(song,index) in resultList" :key="index" @tap="tapSong" :data-index="index">
 				<view class="uni-media-list">
 					<image class="uni-media-list-logo" :src="song.url"></image>
 					<view class="uni-media-list-body">
@@ -220,10 +220,12 @@
 			},
 			
 			//点击单元格
-			tapSong(e){
-				let songId = e.currentTarget.dataset.id
+			tapSong(e){				
+				const index= e.currentTarget.dataset.index
+				// console.log(this.resultList[index])
+				const song = this.resultList[index]
 				uni.navigateTo({
-					url: '../lyricinfo/lyricinfo?songId=' + songId
+					url: `../lyricinfo/lyricinfo?id=${song.id}&name=${song.name}&url=${song.url}&ablum=${song.ablum}`
 				});
 			}
 		}

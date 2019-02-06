@@ -9,6 +9,20 @@
         },
         {
             "path" : "pages/lyricinfo/lyricinfo",
+            "style" : {
+				"h5": {
+					"titleNView" : {
+					    "buttons" : [
+					        {
+					            "type" : "favorite"
+					        }
+					    ]
+					}
+				}
+			}
+        },
+        {
+            "path" : "pages/list/list",
             "style" : {}
         }
     ],
@@ -17,5 +31,17 @@
         "navigationBarTitleText" : "歌词助手",
         "navigationBarBackgroundColor" : "#F8F8F8",
         "backgroundColor" : "#F8F8F8"
+    },
+    "tabBar" : {
+        "list" : [
+            {
+                "pagePath" : "pages/list/list",
+                "text" : "歌词"
+            },
+			{
+			    "pagePath" : "pages/HM-search/HM-search",
+			    "text" : "搜索"
+			}
+        ]
     }
 }

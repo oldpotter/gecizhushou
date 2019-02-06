@@ -4,9 +4,6 @@
 			<view class="text-box" scroll-y="true">
 				<text class="uni-media-list-text-top" selectable>{{ lyric }}</text>
 			</view>
-			<view class="uni-btn-v">
-				<button type="primary" @click="add">收藏</button>
-			</view>
 		</view>
 	</view>
 </template>
@@ -15,25 +12,34 @@
 	export default {
 		data() {
 			return {
-				songId: null,
-				lyric: ''
+				lyric: '',
+				song: null
 			};
 		},
 
 		onLoad(e) {
-			// console.log(e.songId)
-			this.songId = e.songId
-			this.getLyric(this.songId)
+			this.song = {
+				id: e.id,
+				name: e.name,
+				url: e.url,
+				ablum: e.ablum
+			}
+			this.getLyric(this.song.id)
+		},
+		
+		onNavigationBarButtonTap(e) {
+			this.add()
 		},
 
 		methods: {
 			add() {
+				const _this = this
 				uni.getStorage({
 					key: 'songlist',
 					success(res) {
 						let songList = res.data
 						//查找一下是否已经保存过
-						const results = songList.filter(song => song.id === this.songId)
+						const results = songList.filter(song => song.id === _this.song.id)
 						// console.log(results)
 						if (results.length > 0) {
 							uni.showToast({
@@ -42,11 +48,7 @@
 								duration: 1500
 							});
 						} else {
-							const song = {
-								'id': this.songId,
-								'lyric': this.lyric
-							}
-							songList.push(song)
+							songList.push(_this.song)
 							uni.setStorage({
 								key: 'songlist',
 								data: songList,
@@ -63,11 +65,7 @@
 					},
 					fail(res) {
 						let songList = []
-						const song = {
-							'id': this.songId,
-							'lyric': this.lyric
-						}
-						songList.push(song)
+						songList.push(_this.song)
 						uni.setStorage({
 							key: 'songlist',
 							data: songList,
@@ -93,10 +91,11 @@
 								mask: false,
 								duration: 1500
 							});
-							uni.navigateBack({
+							setTimeout(() => uni.navigateBack({
 								delta: 1
-							});
+							}), 1500)
 						} else {
+							// console.log(res)
 							const lyric = res.data.lrc.lyric
 								.replace(/\[[\d.:]+\]/g, '')
 							this.lyric = lyric
