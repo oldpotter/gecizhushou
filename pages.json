@@ -2,14 +2,15 @@
     "pages" : [
         //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
         {
-            "path" : "pages/index/index"
+            "path" : "pages/HM-search/HM-search",
+            "style" : {
+                "navigationBarTitleText" : "搜索"
+            }
         },
         {
-			"path":"pages/HM-search/HM-search",
-			"style":{
-				"navigationBarTitleText": "搜索"
-			}
-		}
+            "path" : "pages/lyricinfo/lyricinfo",
+            "style" : {}
+        }
     ],
     "globalStyle" : {
         "navigationBarTextStyle" : "black",

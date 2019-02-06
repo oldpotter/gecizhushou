@@ -2,7 +2,7 @@
 	<view class="content">
 		<view class="search-box">
 			<!-- mSearch组件 如果使用原样式，删除组件元素-->
-			<mSearch :mode="2" button="inside" :placeholder="defaultKeyword" @search="doSearch(false)" @input="inputChange" @confirm="doSearch(false)" v-model="keyword"></mSearch>
+			<mSearch :mode="2" button="inside" :placeholder="defaultKeyword" @search="doSearch" @input="doSearch"  v-model="keyword"></mSearch>
 			<!-- 原样式 如果使用原样式，恢复下方注销代码 -->
 			<!-- 			
 			<view class="input-box">
@@ -36,7 +36,8 @@
 						<view v-for="key in oldKeywordList" @tap="doSearch(key)" :key="key">{{key}}</view>
 					</view>
 				</view>
-				<view class="keyword-block">
+				<!--
+				<view class="keyword-block" v-if="oldKeywordList.length>0">
 					<view class="keyword-list-header">
 						<view>热门搜索</view>
 						<view>
@@ -50,10 +51,11 @@
 						<view>当前搜热门搜索已隐藏</view>
 					</view>
 				</view>
+				-->
 			</scroll-view>
 		</view>
 		<view class="uni-list">
-			<view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(song,index) in resultList" :key="index">
+			<view class="uni-list-cell" hover-class="uni-list-cell-hover" v-for="(song,index) in resultList" :key="index" @tap="tapSong" :data-id="song.id">
 				<view class="uni-media-list">
 					<image class="uni-media-list-logo" :src="song.url"></image>
 					<view class="uni-media-list-body">
@@ -118,12 +120,11 @@
 			//加载热门搜索
 			loadHotKeyword() {
 				//定义热门搜索关键字，可以自己实现ajax请求数据再赋值
-				this.hotKeywordList = ['键盘', '鼠标', '显示器', '电脑主机', '蓝牙音箱', '笔记本电脑', '鼠标垫', 'USB', 'USB3.0'];
+				//this.hotKeywordList = ['键盘', '鼠标', '显示器', '电脑主机', '蓝牙音箱', '笔记本电脑', '鼠标垫', 'USB', 'USB3.0'];
 			}, 
 			
 			//监听输入
-			inputChange(event) {
-				//兼容引入组件时传入参数情况
+			doSearch(event) {
 				clearTimeout(this.inputTimeout)
 				this.inputTimeout = setTimeout(()=>{
 					var keyword = event.detail?event.detail.value:event;
@@ -132,15 +133,16 @@
 						this.isShowKeywordList = true;
 						return;
 					}
-					//以下示例截取淘宝的关键字，请替换成你的接口
-					
+					//保存关键字
+					this.saveKeyword(keyword)
+					this.isShowKeywordList = false
 					uni.request({
 						url: 'http://shenkeling.top:3000/search?keywords=' + keyword, //仅为示例
 						success: (res) => {
-							console.log(res)
+							// console.log(res)
 							// this.keywordList = this.drawCorrelativeKeyword(res.data.result, keyword);
 							if(res.data.result.songCount > 0){
-								this.isShowKeywordList = false
+								
 								this.resultList = res.data.result.songs.map(song=>{
 									return {
 										id: song.id,
@@ -149,33 +151,14 @@
 										ablum: song.album.name
 									}
 								})
-								
-								// console.log(this.resultList)
 							}else{
-								console.log('无结果')
+								this.resultList = []
 							}
 						}
 					});
 				}, 500)
 				
 
-			},
-			//高亮关键字
-			drawCorrelativeKeyword(keywords, keyword) {
-				var len = keywords.length,
-					keywordArr = [];
-				for (var i = 0; i < len; i++) {
-					var row = keywords[i];
-					//定义高亮#9f9f9f
-					var html = row[0].replace(keyword, "<span style='color: #9f9f9f;'>" + keyword + "</span>");
-					html = '<div>' + html + '</div>';
-					var tmpObj = {
-						keyword: row[0],
-						htmlStr: html
-					};
-					keywordArr.push(tmpObj)
-				}
-				return keywordArr;
 			},
 			//顶置关键字
 			setkeyword(data) {
@@ -202,24 +185,7 @@
 			hotToggle() {
 				this.forbid = this.forbid ? '' : '_forbid';
 			},
-			//执行搜索
-			doSearch(key) {
-				key = key ? key : this.keyword ? this.keyword : this.defaultKeyword;
-				this.keyword = key;
-				this.saveKeyword(key); //保存为历史 
-				uni.showToast({
-					title: key,
-					icon: 'none',
-					duration: 2000
-				});
-				//以下是示例跳转淘宝搜索，可自己实现搜索逻辑
-				//#ifdef APP-PLUS
-				plus.runtime.openURL(encodeURI('taobao://s.taobao.com/search?q=' + key));
-				//#endif
-				//#ifdef H5
-				window.location.href = 'taobao://s.taobao.com/search?q=' + key
-				//#endif
-			},
+			
 			//保存关键字到历史记录
 			saveKeyword(keyword) {
 				uni.getStorage({
@@ -250,6 +216,14 @@
 						});
 						this.oldKeywordList = OldKeys; //更新历史搜索
 					}
+				});
+			},
+			
+			//点击单元格
+			tapSong(e){
+				let songId = e.currentTarget.dataset.id
+				uni.navigateTo({
+					url: '../lyricinfo/lyricinfo?songId=' + songId
 				});
 			}
 		}
