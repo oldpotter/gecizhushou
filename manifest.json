@@ -62,7 +62,7 @@
         "domain" : "",
         "router" : {
             "mode" : "hash",
-            "base" : ""
+            "base" : "/lyric/"
         },
         "devServer" : {
             "port" : "",
