@@ -61,8 +61,8 @@
         "title" : "",
         "domain" : "",
         "router" : {
-            "mode" : "history",
-            "base" : "/lyric"
+            "mode" : "hash",
+            "base" : ""
         },
         "devServer" : {
             "port" : "",
