@@ -1,15 +1,13 @@
 {
     "pages" : [
         //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-        {
-            "path" : "pages/HM-search/HM-search",
-            "style" : {
-                "navigationBarTitleText" : "搜索"
-            }
-        },
-        {
-            "path" : "pages/lyricinfo/lyricinfo",
-            "style" : {
+		{
+		    "path" : "pages/list/list",
+		    "style" : {}
+		},
+		{
+		    "path" : "pages/lyricinfo/lyricinfo",
+		    "style" : {
 				"h5": {
 					"titleNView" : {
 					    "buttons" : [
@@ -20,11 +18,14 @@
 					}
 				}
 			}
-        },
+		},
         {
-            "path" : "pages/list/list",
-            "style" : {}
+            "path" : "pages/HM-search/HM-search",
+            "style" : {
+            }
         }
+        
+        
     ],
     "globalStyle" : {
         "navigationBarTextStyle" : "black",

@@ -25,8 +25,9 @@
 				ablum: e.ablum
 			}
 			this.getLyric(this.song.id)
+			// console.log(this.song.url)
 		},
-		
+
 		onNavigationBarButtonTap(e) {
 			this.add()
 		},
@@ -42,10 +43,39 @@
 						const results = songList.filter(song => song.id === _this.song.id)
 						// console.log(results)
 						if (results.length > 0) {
-							uni.showToast({
-								title: '歌曲已存在',
-								mask: false,
-								duration: 1500
+							// 							uni.showToast({
+							// 								title: '歌曲已存在',
+							// 								mask: false,
+							// 								duration: 1500
+							// 							});
+							uni.showModal({
+								title: '',
+								content: '是否删除这首歌曲',
+								showCancel: true,
+								cancelText: '取消',
+								confirmText: '删除',
+								success: res => {
+									if(res.confirm){
+										const newList = songList.filter(song => song.id !== _this.song.id)
+										console.log(newList)
+										uni.setStorage({
+											key: 'songlist',
+											data: newList,
+											success() {
+												uni.showToast({
+													title: '删除成功',
+													mask: false,
+													duration: 1500
+												});
+												setTimeout(() => uni.navigateBack({
+													delta: 1
+												}), 1500)
+											}
+										})
+									}
+								},
+								fail: () => {},
+								complete: () => {}
 							});
 						} else {
 							songList.push(_this.song)

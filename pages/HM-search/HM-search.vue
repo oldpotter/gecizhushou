@@ -139,7 +139,7 @@
 					uni.request({
 						url: 'http://shenkeling.top:3000/search?keywords=' + keyword, //仅为示例
 						success: (res) => {
-							// console.log(res)
+							console.log(res)
 							// this.keywordList = this.drawCorrelativeKeyword(res.data.result, keyword);
 							if(res.data.result.songCount > 0){
 								
@@ -170,13 +170,13 @@
 					content: '确定清除历史搜索记录？',
 					success: (res) => {
 						if (res.confirm) {
-							console.log('用户点击确定');
+							// console.log('用户点击确定');
 							this.oldKeywordList = [];
 							uni.removeStorage({
 								key: 'OldKeys'
 							});
 						} else if (res.cancel) {
-							console.log('用户点击取消');
+							// console.log('用户点击取消');
 						}
 					}
 				});
@@ -191,7 +191,7 @@
 				uni.getStorage({
 					key: 'OldKeys',
 					success: (res) => {
-						console.log(res.data);
+						// console.log(res.data);
 						var OldKeys = JSON.parse(res.data);
 						var findIndex = OldKeys.indexOf(keyword);
 						if (findIndex == -1) {
@@ -224,8 +224,9 @@
 				const index= e.currentTarget.dataset.index
 				// console.log(this.resultList[index])
 				const song = this.resultList[index]
+				
 				uni.navigateTo({
-					url: `../lyricinfo/lyricinfo?id=${song.id}&name=${song.name}&url=${song.url}&ablum=${song.ablum}`
+					url: `../lyricinfo/lyricinfo?id=${song.id}&name=${song.name}&url=${encodeURIComponent(song.url)}&ablum=${song.ablum}`
 				});
 			}
 		}

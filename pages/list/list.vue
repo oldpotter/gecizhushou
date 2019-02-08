@@ -32,13 +32,21 @@
 				uni.getStorage({
 					key: "songlist",
 					success(res) {
-						console.log(res.data)
+						// console.log(res.data)
 						_this.list = res.data
 					},
 					fail() {
 						console.log('fail')
 					}
 				})
+			},
+			
+			tapSong(e){
+				const index = e.currentTarget.dataset.index
+				const song = this.list[index]
+				uni.navigateTo({
+					url: `../lyricinfo/lyricinfo?id=${song.id}&name=${song.name}&url=${song.url}&ablum=${song.ablum}`
+				});
 			}
 		}
 	}
